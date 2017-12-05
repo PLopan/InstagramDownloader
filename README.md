@@ -1,5 +1,5 @@
 # InstagramDownloader
-Python tool to download media from Instagram without an API access.
+Python tool to download media in full resolution from Instagram without an API access.
 ### Compatible media
 Right now InstagramDownloader is able to download single photo posts.
 
