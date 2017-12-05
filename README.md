@@ -1,11 +1,13 @@
 # InstagramDownloader
 Python tool to download media in full resolution from Instagram without an API access.
+
+Since it doesn't use an API access, you can't download media from a private account.
 ### Compatible media
 Right now InstagramDownloader is able to download single photo posts.
 
 ## Prerequisites
 ### Python version
- `Python 3.6.3`
+Coded, build & tested in: `Python 3.6.3`
  
  I find really useful the tools [pyenv](https://github.com/pyenv/pyenv) and [pyenv-virtualenv](https://github.com/pyenv/pyenv-virtualenv) to manage python versions in my computer.
 
