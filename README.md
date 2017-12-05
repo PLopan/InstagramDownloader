@@ -19,7 +19,9 @@ You can install this packages using `pip`.
 
 ## Usage
 
-`python InstaDown.py <media_url>`
+`python InstaDown.py <photo_url>`
+
+The photo url has the form *https://www.instagram.com/p/xxxx* or *https://www.instagram.com/p/xxxx/?taken-by=yyyy*, you can copy it directly from your browser. 
 
 ## License
 This project is licensed under the GNU General Public License v3.0 - see the [LICENSE](LICENSE) file for details.
