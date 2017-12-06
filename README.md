@@ -21,7 +21,7 @@ You can install this packages using `pip`.
 
 ## Usage
 
-`python insta_down.py <photo_url>`
+`python insta_down.py -l <photo_url>`
 
 The photo url has the form *https://www.instagram.com/p/xxxxx* or *https://www.instagram.com/p/xxxxx/?taken-by=yyyyy*, you can copy it directly from your browser. 
 

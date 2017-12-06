@@ -1,5 +1,5 @@
-import sys
 import urllib.request
+import argparse
 from bs4 import BeautifulSoup
 
 def download_media(media_url):
@@ -19,10 +19,14 @@ def download_media(media_url):
 
 
 if __name__ == "__main__":
-    if len(sys.argv) != 2:
-        print("Use: python InstaDown.py <photo_url>")
-    else:
-        media_url = sys.argv[1]
-        print("Downloading image: " + media_url)
-        download_media(media_url)
-        print("Downloaded image.")
+    # Create argparser and add command line arguments
+    arg_parse = argparse.ArgumentParser("Tool for downloading Instagram media without API connection.argparse")
+    arg_parse.add_argument('-l', '--link', help="Link of instagram photo to download", required=True)
+
+    # Parse the defined arguments
+    args = arg_parse.parse_args()
+    
+    # Download the image
+    print("Downloading image: " + args.link)
+    download_media(args.link)
+    print("Downloaded image.")
