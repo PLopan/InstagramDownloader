@@ -1,4 +1,7 @@
 # InstagramDownloader
+[![GPLv3 license](https://img.shields.io/badge/license-GPLv3-blue.svg)](LICENSE)
+[![built with Python3](https://img.shields.io/badge/built%20with-Python3-red.svg)](https://www.python.org/)
+
 Python tool to download media in full resolution from Instagram without an API access.
 
 Since it doesn't use an API access, you can't download media from a private account.
