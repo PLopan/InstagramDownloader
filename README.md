@@ -6,7 +6,10 @@ Python tool to download media in full resolution from Instagram without an API a
 
 Since it doesn't use an API access, you can't download media from a private account.
 ### Compatible media
-Right now InstagramDownloader is able to download single photo posts.
+Right now InstagramDownloader is able to:
+
+* Download photo posts.
+* Download video posts.
 
 ## Prerequisites
 ### Python version
@@ -26,7 +29,7 @@ You can install this packages using `pip`.
 
 For command line help: `python insta_down.py -h`
 
-`python insta_down.py -l <photo_url>`
+`python insta_down.py -l <media_url>`
 
 The photo url has the form *https://www.instagram.com/p/xxxxx* or *https://www.instagram.com/p/xxxxx/?taken-by=yyyyy*, you can copy it directly from your browser. 
 
