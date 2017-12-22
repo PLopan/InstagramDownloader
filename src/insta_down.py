@@ -3,6 +3,9 @@ import re
 import argparse
 from bs4 import BeautifulSoup
 
+from Media import Media
+import constants
+
 def get_fullres_photo_url(media_url):
     """
         Accesses the media url and extracts the full res link from the html.
@@ -14,12 +17,12 @@ def get_fullres_photo_url(media_url):
     if len(soup.find_all("meta", {"property":"og:video"})) > 0:
         meta_video_tag = soup.find_all("meta", {"property":"og:video"})[0]
         fullres_url = meta_video_tag["content"]
-        isPhoto = False
+        media_type = constants.MEDIA_VIDEO
     else:
         meta_image_tag = soup.find_all("meta", {"property":"og:image"})[0]
         fullres_url = meta_image_tag["content"]
-        isPhoto = True
-    return (fullres_url, isPhoto)
+        media_type = constants.MEDIA_PHOTO
+    return (fullres_url, media_type)
 
 def is_accepted_media_url(media_url):
     """
@@ -44,18 +47,15 @@ if __name__ == "__main__":
     args = arg_parse.parse_args()  
 
     # Check the input link
-    if is_accepted_media_url(args.link):
+    if is_accepted_media_url(args.link):        
         media_url = clean_media_url(args.link)
         # Download the image
-        filename = media_url.rsplit('/')[-1]
-        print("Downloading: " + filename)
-        (fullres_url, isPhoto) = get_fullres_photo_url(media_url)
-        if isPhoto:
-            urllib.request.urlretrieve(fullres_url, filename+'.jpg')
-            print("Downloaded image.")
-        else:
-            urllib.request.urlretrieve(fullres_url, filename+'.mp4')
-            print("Downloaded video.")
+        filename = media_url.rsplit('/')[-1]     
+        print("Downloading: " + filename)   
+        (fullres_url, media_type) = get_fullres_photo_url(media_url)
+        media = Media(filename, fullres_url, media_type)
+        media.download()
+        print("Downloaded: " + filename)
         
     else:
         arg_parse.error("The url given is not valid.")    
