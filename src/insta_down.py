@@ -1,61 +1,46 @@
 import urllib.request
-import re
 import argparse
-from bs4 import BeautifulSoup
+import re
 
 from Media import Media
 import constants
-
-def get_fullres_photo_url(media_url):
-    """
-        Accesses the media url and extracts the full res link from the html.
-        If it finds the og:video image, it is a video publication.
-    """
-    sock = urllib.request.urlopen(media_url)
-    html = sock.read()
-    soup = BeautifulSoup(html, "html.parser")
-    if len(soup.find_all("meta", {"property":"og:video"})) > 0:
-        meta_video_tag = soup.find_all("meta", {"property":"og:video"})[0]
-        fullres_url = meta_video_tag["content"]
-        media_type = constants.MEDIA_VIDEO
-    else:
-        meta_image_tag = soup.find_all("meta", {"property":"og:image"})[0]
-        fullres_url = meta_image_tag["content"]
-        media_type = constants.MEDIA_PHOTO
-    return (fullres_url, media_type)
 
 def is_accepted_media_url(media_url):
     """
         Checks if the input url is an accepted instagram media url.
     """
-    url_regex = "https?://www.instagram.com/p/([a-zA-Z0-9_]+)/?.*"
+    url_regex = "https?://www.instagram.com/p/([a-zA-Z0-9_\-]+)/?.*"
     return re.match(url_regex, media_url)
-
-def clean_media_url(media_url):
-    """
-        Gets the input url to its brief form. (http[s]://instagram.com/p/xxxxx)
-        The param media_url needs to be checked with is_accepted_media_url before.
-    """
-    brief_regex = "https?://www.instagram.com/p/([a-zA-Z0-9_]+)"
-    matched_substr = re.search(brief_regex, media_url)
-    return matched_substr.group()
 
 if __name__ == "__main__":
     # Create argparser, add command line arguments and parse the input
     arg_parse = argparse.ArgumentParser()
-    arg_parse.add_argument('-l', '--link', help="Link of instagram photo to download", required=True)
+    arg_parse.add_argument('-l', '--link', help="Link of instagram photo to download")
+    arg_parse.add_argument('-f', '--file', help="File with links to download (One per line)")
     args = arg_parse.parse_args()  
 
-    # Check the input link
-    if is_accepted_media_url(args.link):        
-        media_url = clean_media_url(args.link)
-        # Download the image
-        filename = media_url.rsplit('/')[-1]     
-        print("Downloading: " + filename)   
-        (fullres_url, media_type) = get_fullres_photo_url(media_url)
-        media = Media(filename, fullres_url, media_type)
-        media.download()
-        print("Downloaded: " + filename)
+    if (args.link is None) and (args.file is None):
+        arg_parse.error("At least -l or -f option should be used.\n See 'python insta_down.py -h' for help.")
+
+    elif args.file is not None:
+        links_file = open(args.file, 'r')
+        for line in links_file:
+            if is_accepted_media_url(line):
+                media = Media(line)   
+                print("Downloading: " + media.media_id)            
+                media.download()
+                print("Downloaded: " + media.media_id)
+            else:
+                print("This link is not valid: " + line)
+
+    elif args.link is not None:
+        if is_accepted_media_url(args.link):
+            media = Media(args.link)   
+            print("Downloading: " + media.media_id)            
+            media.download()
+            print("Downloaded: " + media.media_id)
+        else:
+            arg_parse.error("The url given is not valid.")  
+    
         
-    else:
-        arg_parse.error("The url given is not valid.")    
+      
