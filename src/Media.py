@@ -12,19 +12,21 @@ class Media:
             media_id: Identifier in the URL, it will be saved with this name.
             fullres_url: URL of the media inside the post.
             media_type: Video or Pic.
+            download_dir: Directory to be downloaded.
     """
 
     def __init__(self, post_url):
         self.set_post_url(post_url)
         self.media_id = self.post_url.rsplit('/')[-1]
         self.set_fullres_url()
+        self.download_dir = self.media_id
         
     
     def download(self):        
         if self.media_type == constants.MEDIA_PHOTO:
-            urllib.request.urlretrieve(self.fullres_url, self.media_id + '.jpg')
+            urllib.request.urlretrieve(self.fullres_url, self.download_dir + '.jpg')
         elif self.media_type == constants.MEDIA_VIDEO:
-            urllib.request.urlretrieve(self.fullres_url, self.media_id + '.mp4')
+            urllib.request.urlretrieve(self.fullres_url, self.download_dir + '.mp4')
 
     def set_post_url(self, post_url):
         """
@@ -34,6 +36,10 @@ class Media:
         brief_regex = "https?://www.instagram.com/p/([a-zA-Z0-9_\-]+)"
         matched_substr = re.search(brief_regex, post_url)
         self.post_url =  matched_substr.group()
+    
+    def set_download_dir(self, dir):
+        self.download_dir = dir + '/' + self.download_dir
+    
 
     def set_fullres_url(self):
         """

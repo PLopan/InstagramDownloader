@@ -11,6 +11,7 @@ Right now InstagramDownloader is able to:
 * Download photo posts.
 * Download video posts.
 * Download several photos/videos from file.
+* Choose download directory.
 
 ## Prerequisites
 ### Python version
@@ -37,6 +38,8 @@ For downloading one single photo/video.
 For downloading every photo/video in a file (One post per line).
 
 `python insta_down.py -f <file>`
+
+The option `-d/--dir`can be used to choose the download directory.
 
 The media url has the form *https://www.instagram.com/p/xxxxx* or *https://www.instagram.com/p/xxxxx/?taken-by=yyyyy*, you can copy it directly from your browser. 
 

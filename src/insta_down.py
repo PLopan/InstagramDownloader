@@ -12,11 +12,26 @@ def is_accepted_media_url(media_url):
     url_regex = "https?://www.instagram.com/p/([a-zA-Z0-9_\-]+)/?.*"
     return re.match(url_regex, media_url)
 
+def prepare_and_download(post_url, dir = None):
+    """
+        Receives a post_url, verifies it and downloads it.
+    """
+    if is_accepted_media_url(post_url):
+        media = Media(post_url)
+        if dir is not None:
+            media.set_download_dir(dir)
+        print("Downloading: " + media.media_id)            
+        media.download()
+        print("Downloaded: " + media.media_id)
+    else:
+        print("This link is not valid: " + post_url)
+
 if __name__ == "__main__":
     # Create argparser, add command line arguments and parse the input
     arg_parse = argparse.ArgumentParser()
     arg_parse.add_argument('-l', '--link', help="Link of instagram photo to download")
     arg_parse.add_argument('-f', '--file', help="File with links to download (One per line)")
+    arg_parse.add_argument('-d', '--dir', help="Choose download directory.")
     args = arg_parse.parse_args()  
 
     if (args.link is None) and (args.file is None):
@@ -25,22 +40,10 @@ if __name__ == "__main__":
     elif args.file is not None:
         links_file = open(args.file, 'r')
         for line in links_file:
-            if is_accepted_media_url(line):
-                media = Media(line)   
-                print("Downloading: " + media.media_id)            
-                media.download()
-                print("Downloaded: " + media.media_id)
-            else:
-                print("This link is not valid: " + line)
+            prepare_and_download(line, args.dir)            
 
     elif args.link is not None:
-        if is_accepted_media_url(args.link):
-            media = Media(args.link)   
-            print("Downloading: " + media.media_id)            
-            media.download()
-            print("Downloaded: " + media.media_id)
-        else:
-            arg_parse.error("The url given is not valid.")  
+        prepare_and_download(args.link, args.dir)
     
         
       
